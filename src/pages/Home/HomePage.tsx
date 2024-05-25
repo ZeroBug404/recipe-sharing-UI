@@ -1,8 +1,13 @@
+import DevInfo from "../../components/ui/DevInfo";
+import HeroBanner from "../../components/ui/HeroBanner";
+import SuccessStories from "../../components/ui/SuccessStories";
+
 const HomePage = () => {
   return (
     <div>
-      <h1>Home Page</h1>
-      <p>Welcome to the Home Page!</p>
+      <HeroBanner />
+      <SuccessStories />
+      <DevInfo />
     </div>
   );
 };

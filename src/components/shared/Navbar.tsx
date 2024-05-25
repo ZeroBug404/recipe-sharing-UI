@@ -15,15 +15,15 @@ const Navbar = () => {
 
   const Links = [
     { name: "Home", link: "/" },
-    { name: "Count Tree", link: "/supplier" },
-    { name: "", link: "/blog" },
+    { name: "Recipes", link: "/recipes" },
   ];
 
-  const LinksForAdmin = [
+  const LinksAfterLogin = [
     { name: "Home", link: "/" },
-    { name: "Count Tree", link: "/supplier" },
-    { name: "Dashboard", link: "/dashboard" },
+    { name: "Recipes", link: "/recipes" },
+    { name: "Add Recipes", link: "/add-recipes" },
   ];
+
   const [open, setOpen] = useState(false);
 
   const handleLogout = (accessToken: string) => {
@@ -63,9 +63,8 @@ const Navbar = () => {
             backdropFilter: "blur(8px)",
           }}
         >
-          {role !== "admin" &&
+          {!role &&
             Links.map((link, index) => (
-              // <Link to='#service'>
               <li
                 key={index}
                 className="md:ml-8 md:my-0 my-7 font-semibold uppercase"
@@ -77,12 +76,10 @@ const Navbar = () => {
                   {link.name}
                 </Link>
               </li>
-              // </Link>
             ))}
 
-          {role === "admin" &&
-            LinksForAdmin.map((link, index) => (
-              // <Link to='#service'>
+          {role &&
+            LinksAfterLogin.map((link, index) => (
               <li
                 key={index}
                 className="md:ml-8 md:my-0 my-7 font-semibold uppercase"
@@ -94,7 +91,6 @@ const Navbar = () => {
                   {link.name}
                 </Link>
               </li>
-              // </Link>
             ))}
 
           {role ? (
@@ -112,19 +108,10 @@ const Navbar = () => {
               }}
             >
               <button className="btn border-2 border-[#21286a] text-[#21286a] hover:bg-[#21286a] hover:text-white md:ml-8  px-6 py-3 rounded-full duration-500 md:static text-sm">
-                Login / Register
+                Google Login
               </button>
             </Link>
           )}
-
-          {/* {role !== "applicant" && (
-              <button
-                className="btn bg-[#1967d2] text-white md:ml-8  px-6 py-3 rounded-full duration-500 md:static text-sm mr-3"
-                onClick={handleJobPost}
-              >
-                Job post
-              </button>
-            )} */}
         </ul>
       </div>
     </div>
