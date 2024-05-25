@@ -1,13 +1,26 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Bars3BottomRightIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
-import { getUserInfo, removeUserInfo } from "../../services/auth.service";
+import {
+  getUserInfo,
+  removeUserInfo,
+  storeUserInfo,
+} from "../../services/auth.service";
+import { useSignInWithGoogle } from "react-firebase-hooks/auth";
+import auth from "../../firebase/firebase.config";
+import { useUserLoginMutation } from "../../redux/api/authApi";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
-  const { role } = getUserInfo() as any;
+  const userInfo = getUserInfo() as any;
   const navigate = useNavigate();
+
+  const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
+
+  const [userLogin] = useUserLoginMutation();
 
   const Links = [
     { name: "Home", link: "/" },
@@ -21,10 +34,37 @@ const Navbar = () => {
   ];
 
   const [open, setOpen] = useState(false);
+  interface User {
+    accessToken?: string;
+    displayName: string;
+    email: string;
+    photoURL: string;
+  }
+
+  const handleLogin = async () => {
+    const res = await signInWithGoogle();
+
+    if (res && (res.user as unknown as User)?.accessToken) {
+      const userData = {
+        displayName: (res.user as unknown as User).displayName,
+        email: (res.user as unknown as User).email,
+        photoURL: (res.user as unknown as User).photoURL,
+      };
+
+      await userLogin(userData);
+      storeUserInfo({
+        accessToken: (res.user as unknown as User).accessToken as string,
+      });
+
+      toast.success("Login Successful");
+    }
+  };
+
+  // console.log(userInfo);
 
   const handleLogout = (accessToken: string) => {
     removeUserInfo(accessToken);
-    return navigate("/login");
+    return navigate("/");
   };
 
   return (
@@ -59,7 +99,7 @@ const Navbar = () => {
             backdropFilter: "blur(8px)",
           }}
         >
-          {!role &&
+          {!userInfo &&
             Links.map((link, index) => (
               <li
                 key={index}
@@ -74,7 +114,7 @@ const Navbar = () => {
               </li>
             ))}
 
-          {role &&
+          {userInfo &&
             LinksAfterLogin.map((link, index) => (
               <li
                 key={index}
@@ -89,7 +129,7 @@ const Navbar = () => {
               </li>
             ))}
 
-          {role ? (
+          {userInfo ? (
             <button
               onClick={() => handleLogout("accessToken")}
               className="btn border-2 border-[#21286a] text-[#21286a] hover:bg-[#21286a] hover:text-white md:ml-8  px-6 py-3 rounded-full duration-500 md:static text-sm"
@@ -97,16 +137,12 @@ const Navbar = () => {
               Logout
             </button>
           ) : (
-            <Link
-              to={"/login"}
-              style={{
-                cursor: "pointer",
-              }}
+            <button
+              onClick={handleLogin}
+              className="btn border-2 border-[#21286a] text-[#21286a] hover:bg-[#21286a] hover:text-white md:ml-8  px-6 py-3 rounded-full duration-500 md:static text-sm"
             >
-              <button className="btn border-2 border-[#21286a] text-[#21286a] hover:bg-[#21286a] hover:text-white md:ml-8  px-6 py-3 rounded-full duration-500 md:static text-sm">
-                Google Login
-              </button>
-            </Link>
+              Google Login
+            </button>
           )}
         </ul>
       </div>
