@@ -2,6 +2,35 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import { TiTick } from "react-icons/ti";
 
 const BuyCoin = () => {
+  const choosePlan = (plan: number) => {
+    const requestData = {
+      pricing: plan,
+      userId: localStorage.getItem("userId"),
+    };
+
+    const res = fetch(
+      `http://localhost:5000/api/v1/payments/create-subscription-checkout-session`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        mode: "cors",
+        body: JSON.stringify(requestData),
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        // console.log(data.data.url);
+
+        window.location = data.data.url;
+      })
+      .catch((e) => {
+        console.log(e.error);
+      });
+
+    console.log(res);
+  };
   return (
     <div className="font-sans bg-gray-100 mt-8">
       <div className="min-h-screen flex justify-center items-center">
@@ -36,14 +65,15 @@ const BuyCoin = () => {
                   </span>
                 </p>
 
-                <a href="#" className="">
-                  <p className="w-full py-4 bg-blue-600 mt-8 rounded-xl text-white flex justify-center items-center">
-                    <span className="font-medium">Choose Plan</span>
-                    <span className="pl-2 material-icons align-middle text-sm">
-                      <FaArrowRightLong />
-                    </span>
-                  </p>
-                </a>
+                <p
+                  onClick={() => choosePlan(Number(1))}
+                  className="w-full py-4 bg-blue-600 mt-8 rounded-xl text-white flex justify-center items-center cursor-pointer"
+                >
+                  <span className="font-medium">Choose Plan</span>
+                  <span className="pl-2 material-icons align-middle text-sm">
+                    <FaArrowRightLong />
+                  </span>
+                </p>
               </div>
             </div>
             {/* <!-- StartUp Card --> */}
@@ -65,14 +95,15 @@ const BuyCoin = () => {
                   </span>
                 </p>
 
-                <a href="#" className="">
-                  <p className="w-full py-4 bg-blue-600 mt-8 rounded-xl text-white flex justify-center items-center">
-                    <span className="font-medium">Choose Plan</span>
-                    <span className="pl-2 material-icons align-middle text-sm">
-                      <FaArrowRightLong />
-                    </span>
-                  </p>
-                </a>
+                <p
+                  onClick={() => choosePlan(Number(5))}
+                  className="w-full py-4 bg-blue-600 mt-8 rounded-xl text-white flex justify-center items-center cursor-pointer"
+                >
+                  <span className="font-medium">Choose Plan</span>
+                  <span className="pl-2 material-icons align-middle text-sm">
+                    <FaArrowRightLong />
+                  </span>
+                </p>
               </div>
               <div className="absolute top-4 right-4">
                 <p className="bg-blue-700 font-semibold px-4 py-1 rounded-full uppercase text-xs">
@@ -99,14 +130,15 @@ const BuyCoin = () => {
                   </span>
                 </p>
 
-                <a href="#" className="">
-                  <p className="w-full py-4 bg-blue-600 mt-8 rounded-xl text-white flex justify-center items-center">
-                    <span className="font-medium">Choose Plan</span>
-                    <span className="pl-2 material-icons align-middle text-sm">
-                      <FaArrowRightLong />
-                    </span>
-                  </p>
-                </a>
+                <p
+                  onClick={() => choosePlan(Number(10))}
+                  className="w-full py-4 bg-blue-600 mt-8 rounded-xl text-white flex justify-center items-center cursor-pointer"
+                >
+                  <span className="font-medium">Choose Plan</span>
+                  <span className="pl-2 material-icons align-middle text-sm">
+                    <FaArrowRightLong />
+                  </span>
+                </p>
               </div>
             </div>
           </div>
