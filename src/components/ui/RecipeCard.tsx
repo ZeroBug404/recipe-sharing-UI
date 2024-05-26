@@ -8,6 +8,7 @@ import {
 } from "../../redux/api/authApi";
 import { getUserInfo } from "../../services/auth.service";
 import { useUpdateRecipeMutation } from "../../redux/api/recipeApi";
+import { TiTick } from "react-icons/ti";
 
 interface RecipeType {
   [x: string]: any;
@@ -32,11 +33,11 @@ const RecipeCard = ({ recipe }: { recipe: RecipeType }) => {
 
   const [updateRecipe] = useUpdateRecipeMutation();
 
-  // console.log(allUsers);
   const user = allUsers?.data?.find(
     (user: any) => user.email === recipe.creatorEmail
   );
-  // console.log("user: ", user);
+
+  const purchased = recipe.purchasedBy.includes(userInfo.email);
 
   const handleViewRecipe = () => {
     if (!userInfo) {
@@ -103,8 +104,17 @@ const RecipeCard = ({ recipe }: { recipe: RecipeType }) => {
               <p className="text-gray-600 text-lg">{recipe.country}</p>
             </div>
           </div>
-          <div>
-            <p className="text-gray-600 mt-2">Purchased By:</p>
+          <div className="">
+            {purchased && (
+              <div className="flex justify-end">
+                <div className="flex items-center w-5 h-5 border rounded-full justify-end">
+                  <TiTick className="text-green-500 text-2xl" />
+                </div>
+              </div>
+            )}
+            <p className="text-gray-600 mt-2">
+              Purchased By: {recipe.purchasedBy.length}
+            </p>
           </div>
         </div>
         <div className="w-full flex justify-end">
