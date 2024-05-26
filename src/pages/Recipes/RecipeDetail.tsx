@@ -1,32 +1,59 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { useGetSingleRecipeQuery } from "../../redux/api/recipeApi";
-import ReactPlayer from "react-player";
 import { FaHeart } from "react-icons/fa";
 import { IoLocationOutline } from "react-icons/io5";
+import ReactPlayer from "react-player";
+import { useParams } from "react-router-dom";
+import SimilarRecipesCard from "../../components/ui/SimilarRecipesCard";
+import {
+  useGetSingleUserQuery,
+  useUpdateUserMutation,
+} from "../../redux/api/authApi";
+import { useGetSingleRecipeQuery } from "../../redux/api/recipeApi";
 
 const RecipeDetail = () => {
   const { id } = useParams();
   const [isReadMore, setIsReadMore] = useState(true);
+  const [reacted, setReacted] = useState(false);
 
   const toggleReadMore = () => {
     setIsReadMore(!isReadMore);
   };
 
+  const userId = localStorage.getItem("userId");
+
+  const { data: userData } = useGetSingleUserQuery(userId);
+
   const { data: recipeDetail } = useGetSingleRecipeQuery(id);
 
-  console.log(recipeDetail?.data);
+  //   console.log(userData?.data);
+
+  const [updateUser] = useUpdateUserMutation();
+
+  const handleReact = async () => {
+    setReacted(!reacted);
+
+    if (reacted === true) {
+      const response = await updateUser({
+        id: userId,
+        data: {
+          reacted: [...userData.data.reacted, recipeDetail?.data?.id],
+        },
+      });
+
+      console.log(response);
+    }
+  };
 
   return (
     <>
       <div className="bg-white mt-20" key={recipeDetail?.data?._id}>
-        <div className="w-[1200px] mx-auto">
+        <div className="w-[1400px] mx-auto flex gap-8">
           {/* <div className="pt-[6rem]">
             <Breadcrumb paths={paths} />
           </div> */}
-          <div className="flex justify-between gap-5">
+          <div className="flex w-[48%] justify-between gap-5">
             {/* <ListingSlider image_url={recipeDetail?.data?.image} /> */}
-            <div style={{ width: "56%" }} className="mt-4">
+            <div className="mt-4">
               <div className="border flex justify-center p-4 flex-col gap-3">
                 {/* Seller deatil, price etc */}
                 <div className="flex gap-6">
@@ -48,8 +75,17 @@ const RecipeDetail = () => {
                           {recipeDetail?.data?.country}
                         </p>
                       </div>
-                      <div className="w-8 h-8 border rounded-full border-gray-400 flex justify-center items-center">
-                        <FaHeart className="text-sm text-gray-700" />
+                      <div
+                        onClick={handleReact}
+                        className="w-8 h-8 border rounded-full border-gray-400 flex justify-center items-center"
+                      >
+                        <FaHeart
+                          className={
+                            reacted
+                              ? "text-red-500 text-sm"
+                              : "text-gray-500 text-sm"
+                          }
+                        />
                       </div>
                     </div>
                   </div>
@@ -96,12 +132,12 @@ const RecipeDetail = () => {
           <div className="">
             {/* More details about this user */}
             <div
-              className="border p-5 rounded mt-5 flex-1"
+              className="border p-5 rounded mt-4"
               style={{ height: "max-content" }}
             >
               <h4 className="text-lg font-medium mb-3">Similar Recipes</h4>
 
-              {/* <OldListingCard recipeDetail={recipeDetail} /> */}
+              <SimilarRecipesCard recipeDetail={recipeDetail} />
             </div>
           </div>
         </div>

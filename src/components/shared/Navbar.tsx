@@ -24,12 +24,12 @@ const Navbar = () => {
 
   const Links = [
     { name: "Home", link: "/" },
-    { name: "Recipes", link: "/recipes" },
+    { name: "Recipes", link: "/all-recipes" },
   ];
 
   const LinksAfterLogin = [
     { name: "Home", link: "/" },
-    { name: "Recipes", link: "/recipes" },
+    { name: "Recipes", link: "/all-recipes" },
     { name: "Add Recipes", link: "/add-recipes" },
   ];
 
@@ -51,7 +51,10 @@ const Navbar = () => {
         photoURL: (res.user as unknown as User).photoURL,
       };
 
-      await userLogin(userData);
+      const response = await userLogin(userData);
+
+      localStorage.setItem("userId", response.data.data.id);
+
       storeUserInfo({
         accessToken: (res.user as unknown as User).accessToken as string,
       });

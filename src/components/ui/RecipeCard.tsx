@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import {
+  useGetAllUserQuery,
+  useGetSingleUserQuery,
+  useUpdateUserMutation,
+} from "../../redux/api/authApi";
 import { getUserInfo } from "../../services/auth.service";
-import { Link } from "react-router-dom";
+import { useUpdateRecipeMutation } from "../../redux/api/recipeApi";
 
 interface RecipeType {
   [x: string]: any;
@@ -14,6 +20,24 @@ interface RecipeType {
 const RecipeCard = ({ recipe }: { recipe: RecipeType }) => {
   const userInfo = getUserInfo() as any;
 
+  const navigate = useNavigate();
+
+  const userId = localStorage.getItem("userId");
+
+  const { data: userData } = useGetSingleUserQuery(userId);
+
+  const { data: allUsers } = useGetAllUserQuery({});
+
+  const [updateUser] = useUpdateUserMutation();
+
+  const [updateRecipe] = useUpdateRecipeMutation();
+
+  // console.log(allUsers);
+  const user = allUsers?.data?.find(
+    (user: any) => user.email === recipe.creatorEmail
+  );
+  // console.log("user: ", user);
+
   const handleViewRecipe = () => {
     if (!userInfo) {
       toast.error("You must be logged in to view a recipe");
@@ -21,7 +45,42 @@ const RecipeCard = ({ recipe }: { recipe: RecipeType }) => {
     }
 
     if (recipe.creatorEmail === userInfo.email) {
-      // redirect to recipe detail page
+      navigate(`/recipe/${recipe._id}`);
+    }
+
+    if (recipe.creatorEmail !== userInfo.email) {
+      if (recipe.purchasedBy.includes(userInfo.email)) {
+        navigate(`/recipe/${recipe._id}`);
+        return;
+      }
+
+      if (userData.data.coin < 10) {
+        navigate("/buy-coin");
+        toast.error("You do not have enough coins to view this recipe");
+        return;
+      } else {
+        const confirm = window.confirm(
+          "Are you sure you want to spend 10 coins to view this recipe?"
+        );
+        if (confirm) {
+          updateUser({ id: userId, data: { coin: userData.data.coin - 10 } });
+          updateUser({
+            id: user.id,
+            data: { coin: user.coin + 1 },
+          });
+
+          updateRecipe({
+            id: recipe._id,
+            data: {
+              purchasedBy: [...recipe.purchasedBy, userInfo.email],
+              watchCount: recipe.watchCount + 1,
+            },
+          });
+        } else {
+          return;
+        }
+        navigate(`/recipe/${recipe._id}`);
+      }
     }
   };
 
@@ -49,15 +108,13 @@ const RecipeCard = ({ recipe }: { recipe: RecipeType }) => {
           </div>
         </div>
         <div className="w-full flex justify-end">
-          <Link to={{ pathname: `/recipe/${recipe._id}` }}>
-            <button
-              type="button"
-              onClick={handleViewRecipe}
-              className="text-white border-2 bg-[#21286a] hover:bg-[white] hover:border-[#21286a] hover:text-[#21286a] text-lg font-regular py-2 px-4 rounded transition duration-500 ease-in-out transform"
-            >
-              View Recipe
-            </button>
-          </Link>
+          <button
+            type="button"
+            onClick={handleViewRecipe}
+            className="text-white border-2 bg-[#21286a] hover:bg-[white] hover:border-[#21286a] hover:text-[#21286a] text-lg font-regular py-2 px-4 rounded transition duration-500 ease-in-out transform"
+          >
+            View Recipe
+          </button>
         </div>
       </div>
     </div>

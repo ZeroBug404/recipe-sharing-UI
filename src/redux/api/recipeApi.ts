@@ -20,6 +20,13 @@ export const recipeApi = baseApi.injectEndpoints({
         url: `recipes/${id}`,
       }),
     }),
+    updateRecipe: build.mutation({
+      query: ({ id, data }) => ({
+        url: `recipes/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -27,4 +34,5 @@ export const {
   useAddRecipeMutation,
   useAllRecipesQuery,
   useGetSingleRecipeQuery,
+  useUpdateRecipeMutation,
 } = recipeApi;
