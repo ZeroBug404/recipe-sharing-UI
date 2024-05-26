@@ -15,7 +15,16 @@ export const recipeApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    getSingleRecipe: build.query({
+      query: (id) => ({
+        url: `recipes/${id}`,
+      }),
+    }),
   }),
 });
 
-export const { useAddRecipeMutation, useAllRecipesQuery } = recipeApi;
+export const {
+  useAddRecipeMutation,
+  useAllRecipesQuery,
+  useGetSingleRecipeQuery,
+} = recipeApi;

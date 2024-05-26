@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import toast from "react-hot-toast";
 import { getUserInfo } from "../../services/auth.service";
+import { Link } from "react-router-dom";
 
 interface RecipeType {
+  [x: string]: any;
   name: string;
   image: string;
   creatorEmail: string;
@@ -11,8 +13,6 @@ interface RecipeType {
 
 const RecipeCard = ({ recipe }: { recipe: RecipeType }) => {
   const userInfo = getUserInfo() as any;
-
-  console.log(userInfo);
 
   const handleViewRecipe = () => {
     if (!userInfo) {
@@ -49,13 +49,15 @@ const RecipeCard = ({ recipe }: { recipe: RecipeType }) => {
           </div>
         </div>
         <div className="w-full flex justify-end">
-          <button
-            type="button"
-            onClick={handleViewRecipe}
-            className="text-white border-2 bg-[#21286a] hover:bg-[white] hover:border-[#21286a] hover:text-[#21286a] text-lg font-regular py-2 px-4 rounded transition duration-500 ease-in-out transform"
-          >
-            View Recipe
-          </button>
+          <Link to={{ pathname: `/recipe/${recipe._id}` }}>
+            <button
+              type="button"
+              onClick={handleViewRecipe}
+              className="text-white border-2 bg-[#21286a] hover:bg-[white] hover:border-[#21286a] hover:text-[#21286a] text-lg font-regular py-2 px-4 rounded transition duration-500 ease-in-out transform"
+            >
+              View Recipe
+            </button>
+          </Link>
         </div>
       </div>
     </div>
