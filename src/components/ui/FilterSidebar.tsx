@@ -32,9 +32,11 @@ const FilterSidebar = ({
           className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm"
         >
           <option value="">All</option>
+          <option value="Main Course">Main Course</option>
+          <option value="Appetizer">Appetizer</option>
           <option value="Breakfast">Breakfast</option>
-          <option value="Lunch">Lunch</option>
-          <option value="Dinner">Dinner</option>
+          <option value="Soup">Soup</option>
+          <option value="Dessert">Dessert</option>
         </select>
       </div>
       <div className="mb-4">
@@ -49,6 +51,18 @@ const FilterSidebar = ({
           <option value="USA">USA</option>
           <option value="Canada">Canada</option>
           <option value="UK">UK</option>
+          <option value="Turky">Turky</option>
+          <option value="India">India</option>
+          <option value="Thailand">Thailand</option>
+          <option value="Hungary">Hungary</option>
+          <option value="Lebanon">Lebanon</option>
+          <option value="China">China</option>
+          <option value="Morocco">Morocco</option>
+          <option value="France">France</option>
+          <option value="Spain">Spain</option>
+          <option value="Japan">Japan</option>
+          <option value="Italy">Italy</option>
+          <option value="Mexico">Mexico</option>
         </select>
       </div>
     </div>

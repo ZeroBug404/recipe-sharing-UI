@@ -129,7 +129,7 @@ const RecipeDetail = () => {
             </div>
           </div>
 
-          <div className="">
+          <div className="w-full flex justify-center">
             {/* More details about this user */}
             <div
               className="border p-5 rounded mt-4"

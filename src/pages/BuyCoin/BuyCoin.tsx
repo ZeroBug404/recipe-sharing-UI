@@ -9,7 +9,7 @@ const BuyCoin = () => {
     };
 
     const res = fetch(
-      `http://localhost:5000/api/v1/payments/create-subscription-checkout-session`,
+      `https://recipe-sharing-server.vercel.app/api/v1/payments/create-subscription-checkout-session`,
       {
         method: "POST",
         headers: {

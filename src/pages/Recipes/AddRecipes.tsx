@@ -39,10 +39,12 @@ const AddRecipes = () => {
     }
   };
 
-  const handleImageUpload = async (e: { target: { files: any[] } }) => {
-    const file = e.target.files[0];
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     const formData = new FormData();
-    formData.append("image", file);
+    if (file) {
+      formData.append("image", file);
+    }
 
     try {
       const response = await axios.post(
@@ -119,10 +121,11 @@ const AddRecipes = () => {
               required
             >
               <option value="">Select a category</option>
-              <option value="Appetizer">Appetizer</option>
               <option value="Main Course">Main Course</option>
+              <option value="Appetizer">Appetizer</option>
+              <option value="Breakfast">Breakfast</option>
+              <option value="Soup">Soup</option>
               <option value="Dessert">Dessert</option>
-              <option value="Beverage">Beverage</option>
             </select>
           </div>
         </div>

@@ -6,6 +6,7 @@ import AddRecipes from "../pages/Recipes/AddRecipes";
 import AllRecipes from "../pages/Recipes/AllRecipes";
 import RecipeDetail from "../pages/Recipes/RecipeDetail";
 import BuyCoin from "../pages/BuyCoin/BuyCoin";
+import PrivateRoutes from "./PrivateRoutes";
 
 const routes = createBrowserRouter([
   {
@@ -18,7 +19,11 @@ const routes = createBrowserRouter([
       },
       {
         path: "/add-recipes",
-        element: <AddRecipes />,
+        element: (
+          <PrivateRoutes>
+            <AddRecipes />
+          </PrivateRoutes>
+        ),
       },
       {
         path: "/all-recipes",
@@ -26,11 +31,19 @@ const routes = createBrowserRouter([
       },
       {
         path: "/recipe/:id",
-        element: <RecipeDetail />,
+        element: (
+          <PrivateRoutes>
+            <RecipeDetail />
+          </PrivateRoutes>
+        ),
       },
       {
         path: "/buy-coin",
-        element: <BuyCoin />,
+        element: (
+          <PrivateRoutes>
+            <BuyCoin />
+          </PrivateRoutes>
+        ),
       },
     ],
   },

@@ -90,7 +90,7 @@ const RecipeCard = ({ recipe }: { recipe: RecipeType }) => {
       <img
         src={recipe.image}
         alt=""
-        className="w-[45%] h-full object-cover rounded-l-lg"
+        className="w-[45%] h-[14rem] object-cover rounded-l-lg"
       />
       <div className="w-2/3 p-4 flex flex-col justify-between">
         <div className="flex justify-between">

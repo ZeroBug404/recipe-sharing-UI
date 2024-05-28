@@ -11,7 +11,10 @@ import {
 } from "../../services/auth.service";
 import { useSignInWithGoogle } from "react-firebase-hooks/auth";
 import auth from "../../firebase/firebase.config";
-import { useGetSingleUserQuery, useUserLoginMutation } from "../../redux/api/authApi";
+import {
+  useGetSingleUserQuery,
+  useUserLoginMutation,
+} from "../../redux/api/authApi";
 import toast from "react-hot-toast";
 
 const Navbar = () => {
@@ -19,8 +22,8 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   // console.log(userInfo);
-  
-  const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
+
+  const [signInWithGoogle] = useSignInWithGoogle(auth);
 
   const [userLogin] = useUserLoginMutation();
 
@@ -33,6 +36,7 @@ const Navbar = () => {
     { name: "Home", link: "/" },
     { name: "Recipes", link: "/all-recipes" },
     { name: "Add Recipes", link: "/add-recipes" },
+    { name: "Buy Coin", link: "/buy-coin" },
   ];
 
   const [open, setOpen] = useState(false);
@@ -54,9 +58,9 @@ const Navbar = () => {
       };
 
       const response = await userLogin(userData);
-      console.log(response);
-      
-      localStorage.setItem("userId", response.data.data.id);
+      // console.log(response);
+
+      localStorage.setItem("userId", response?.data?.data?.id);
 
       storeUserInfo({
         accessToken: (res.user as unknown as User).accessToken as string,
@@ -74,10 +78,9 @@ const Navbar = () => {
 
   const userId = localStorage.getItem("userId");
 
-  const {data} = useGetSingleUserQuery(userId as string);
+  const { data } = useGetSingleUserQuery(userId as string);
 
   // console.log(data?.data);
-  
 
   return (
     <div className="shadow-md w-full fixed top-0 left-0 z-10">
@@ -144,15 +147,14 @@ const Navbar = () => {
           {/* Coins+User-Image */}
           {userInfo && (
             <li className="md:ml-8 md:my-0 my-7 font-semibold uppercase">
-
-                <div className="flex items-center gap-2 border p-2 rounded-lg">
-                  <img
-                    src={userInfo.picture}
-                    alt=""
-                    className="w-8 h-8 rounded-full"
-                  />
-                  <span>{data?.data?.coin}</span>
-                </div>
+              <div className="flex items-center gap-2 border p-2 rounded-lg">
+                <img
+                  src={userInfo.picture}
+                  alt=""
+                  className="w-8 h-8 rounded-full"
+                />
+                <span>{data?.data?.coin}</span>
+              </div>
             </li>
           )}
 

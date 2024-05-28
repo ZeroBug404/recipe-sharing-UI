@@ -36,14 +36,14 @@ const HeroBanner = () => {
                 See Recipes
               </button>
             </Link>
-            <a href="#search-dish-call">
+            <Link to={"/add-recipes"}>
               <button
                 type="button"
                 className="border-2 border-[#21286a] text-[#21286a] hover:bg-[#21286a] hover:text-white text-lg font-regular py-2 px-4 rounded transition duration-500 ease-in-out transform"
               >
                 Add Recipes
               </button>
-            </a>
+              </Link>
           </div>
         </div>
 
